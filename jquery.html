@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>jquery</title>
+  <script src="//cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    input[type="text"] {
+      width: 200px;
+    }
+    .error {
+      color: red;
+    }
+    .lists-item {
+      padding: 16px;
+      background-color: darkgrey;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <h1>欲しいものリスト</h1>
+  <div class="textfield">
+    <input class="textfield-input js-textfield-input" type="text" placeholder="欲しいものを追加してください">
+    <button class="textfield-button js-textfield-button">
+      追加
+    </button>
+  </div>
+  <div class="error js-error"></div>
+  <div class="lists js-lists">
+    <h2>欲しいもの</h2>
+    <div class="lists-emptyMessage js-lists-emptyMessage">欲しいものはありません</div>
+  </div>
+  <!-- script -->
+  <script>
+    // 追加ボタンを押した時
+    $('.js-textfield-button').on('click', function () {
+      var inputValue = $('.js-textfield-input').val()
+      if (inputValue) {
+        // テキストフィールドに入力があった場合の追加処理
+        var html = '<div class="lists-item js-lists-item"><span>' + inputValue + '</span><button class="lists-item-button js-lists-item-button">削除</button></div>'
+        $('.js-lists').append(html)
+        $('.js-textfield-input').val('')
+
+        // 「~~がありません」メッセージ処理
+        var listItemCount = $('.js-lists-item').length
+        if (listItemCount) {
+          $('.js-lists-emptyMessage').hide()
+        } else {
+          $('.js-lists-emptyMessage').show()
+        }
+      } else {
+        // テキストフィールドに入力がない場合のエラーメッセージ処理
+        $('.js-error').text('入力がありません')
+      }
+    })
+
+    // 削除ボタンを押した時
+    $('.js-lists').on('click', '.js-lists-item-button', function () {
+      // リストアイテムの削除
+      $(this).parent().remove()
+      // 「~~がありません」メッセージ処理
+      var listItemCount = $('.js-lists-item').length
+      if (listItemCount) {
+        $('.js-lists-emptyMessage').hide()
+      } else {
+        $('.js-lists-emptyMessage').show()
+      }
+    })
+
+    // テキストフィールドに入力した時
+    $('.js-textfield-input').on('keyup', function () {
+      var inputValue = $('.js-textfield-input').val()
+      if (inputValue) {
+        $('.js-error').text('')
+      }
+    })
+  </script>
+</body>
+</html>

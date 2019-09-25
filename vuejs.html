@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vuejs</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    input[type="text"] {
+      width: 200px;
+    }
+    .error {
+      color: red;
+    }
+    .lists-item {
+      padding: 16px;
+      background-color: darkgrey;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>欲しいものリスト</h1>
+    <div class="textfield">
+      <input v-model="inputValue" @input="onInput" class="textfield-input" type="text" placeholder="欲しいものを追加してください">
+      <button @click="onPush" class="textfield-button">
+        追加
+      </button>
+    </div>
+    <div v-if="isError" class="error">{{ errorText }}</div>
+    <h2>欲しいもの</h2>
+    <div v-if="lists.length" class="lists">
+      <div v-for="(list, index) in lists" class="lists-item">
+        <span>{{ list }}</span>
+        <button @click="onDelete(index)" class="lists-item-button">削除</button>
+      </div>
+    </div>
+    <div v-else class="lists-emptyMessage">欲しいものはありません</div>
+  </div>
+  <!-- script -->
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          searchValue: '',
+          inputValue: '',
+          lists: [],
+          isError: false,
+          errorText: '',
+        }
+      },
+      methods: {
+        // 削除ボタンを押した時
+        onDelete (index) {
+          this.lists.splice(index, 1)
+        },
+        // 追加ボタンを押した時
+        onPush () {
+          // テキストフィールドに入力があった場合の追加処理
+          if (this.inputValue) {
+            this.lists.push(this.inputValue)
+            this.inputValue = ''
+          } else {
+            this.isError = true
+            this.errorText = '入力がありません'
+          }
+        },
+        // 入力されたとき
+        onInput () {
+          if (this.isError && this.inputValue) {
+            this.isError = false
+            this.errorText = ''
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>
